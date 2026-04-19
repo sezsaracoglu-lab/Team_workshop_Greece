@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ONE VOICE · ONE TEAM · Greece HR</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1F1C18;
+    --ink-soft: #4A443C;
+    --ink-mute: #7A7267;
+    --paper: #F4EFE6;
+    --paper-deep: #EAE2D2;
+    --paper-card: #FBF7EE;
+    --rust: #B06A3B;
+    --rust-deep: #8F5328;
+    --sage: #6E7A5A;
+    --rule: #C9BFAD;
+    --rule-soft: #DDD4C1;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    height: 100%;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Outfit', sans-serif;
+    font-weight: 300;
+    letter-spacing: 0.005em;
+    overflow: hidden;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image: radial-gradient(rgba(31,28,24,0.03) 1px, transparent 1px);
+    background-size: 3px 3px;
+    z-index: 1;
+  }
+
+  .run-header {
+    position: fixed; top: 0; left: 0; right: 0; height: 3.2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2.4vw; z-index: 50;
+    font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--ink-soft); font-weight: 500;
+  }
+  .run-header .brand { font-weight: 600; letter-spacing: 0.3em; }
+  .run-header .phase { color: var(--rust-deep); font-family: 'Outfit', sans-serif; }
+  .run-header .phase .clock {
+    font-variant-numeric: tabular-nums; color: var(--ink);
+    margin-right: 0.8rem; font-weight: 600;
+  }
+
+  .deck { position: relative; width: 100vw; height: 100vh; z-index: 2; }
+  .slide {
+    position: absolute; inset: 0;
+    padding: 7vh 8vw 8vh;
+    display: flex; flex-direction: column; justify-content: center;
+    opacity: 0; visibility: hidden;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+    overflow: hidden;
+  }
+  .slide.active { opacity: 1; visibility: visible; }
+
+  .display {
+    font-family: 'Fraunces', serif; font-weight: 300;
+    color: var(--ink); line-height: 0.98; letter-spacing: -0.02em;
+  }
+  .display em { font-style: italic; color: var(--rust-deep); font-weight: 400; }
+  .d-xxl { font-size: clamp(4rem, 11vw, 10rem); }
+  .d-xl  { font-size: clamp(3rem, 7.5vw, 7rem); }
+  .d-l   { font-size: clamp(2.4rem, 5.5vw, 5rem); }
+  .d-m   { font-size: clamp(1.8rem, 3.8vw, 3.2rem); }
+
+  .eyebrow {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.7rem; letter-spacing: 0.32em; text-transform: uppercase;
+    color: var(--rust-deep); font-weight: 500; margin-bottom: 3vh;
+  }
+
+  .lede {
+    font-family: 'Fraunces', serif; font-style: italic; font-weight: 300;
+    font-size: clamp(1.15rem, 1.7vw, 1.55rem);
+    line-height: 1.45; color: var(--ink-soft);
+    max-width: 58ch; margin-top: 3vh;
+  }
+
+  .cards { display: grid; gap: 1.8rem; margin-top: 5vh; }
+  .cards.c-2 { grid-template-columns: repeat(2, 1fr); }
+  .cards.c-3 { grid-template-columns: repeat(3, 1fr); }
+  .cards.c-4 { grid-template-columns: repeat(4, 1fr); }
+  .cards.c-5 { grid-template-columns: repeat(5, 1fr); }
+
+  .card {
+    padding: 3vh 1.8vw 3.2vh;
+    border-top: 1px solid var(--rust);
+    display: flex; flex-direction: column; gap: 1.2vh;
+  }
+  .card .num {
+    font-family: 'Outfit', sans-serif; font-weight: 600;
+    font-size: 0.75rem; letter-spacing: 0.3em; color: var(--rust-deep);
+  }
+  .card .title {
+    font-family: 'Fraunces', serif; font-weight: 400;
+    font-size: clamp(1.15rem, 1.55vw, 1.5rem);
+    line-height: 1.15; color: var(--ink);
+    margin-top: 0.6vh; min-height: 2.8rem;
+  }
+  .card .title em { font-style: italic; color: var(--rust-deep); font-weight: 400; }
+  .card .body {
+    font-size: clamp(0.85rem, 1vw, 0.98rem);
+    line-height: 1.55; color: var(--ink-soft); font-weight: 300;
+  }
+
+  .agenda {
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    gap: 1.5rem; margin-top: 6vh;
+  }
+  .a-phase {
+    padding: 2.4vh 1.3vw;
+    border-top: 1px solid var(--rust);
+    display: flex; flex-direction: column; gap: 1vh;
+    min-height: 22vh;
+  }
+  .a-phase .no {
+    font-family: 'Fraunces', serif; font-weight: 300;
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    color: var(--rust-deep); line-height: 1; letter-spacing: -0.02em;
+  }
+  .a-phase .name {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(1.05rem, 1.35vw, 1.35rem);
+    line-height: 1.2; color: var(--ink); font-weight: 400;
+  }
+  .a-phase .name em { font-style: italic; color: var(--rust-deep); font-weight: 400; }
+  .a-phase .cap {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.72rem; letter-spacing: 0.1em; color: var(--ink-mute);
+    margin-top: auto; font-variant-numeric: tabular-nums; font-weight: 500;
+  }
+
+  .hero-word {
+    font-family: 'Fraunces', serif; font-weight: 300;
+    font-size: clamp(5rem, 16vw, 16rem);
+    line-height: 0.88; letter-spacing: -0.03em; color: var(--ink);
+  }
+  .hero-word em { font-style: italic; color: var(--rust-deep); font-weight: 400; }
+  .hero-caption {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.72rem; letter-spacing: 0.32em; text-transform: uppercase;
+    color: var(--rust-deep); font-weight: 500; margin-bottom: 3vh;
+  }
+
+  .center-all { align-items: center; text-align: center; justify-content: center; }
+  .center-all .lede { margin-left: auto; margin-right: auto; }
+
+  .rule-mark { width: 64px; height: 1px; background: var(--rust); margin: 3vh auto; }
+
+  /* Questions grid (two-prompt reflection) */
+  .questions {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3vh 4vw;
+    margin-top: 4vh;
+  }
+  .q {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-style: italic;
+    font-size: clamp(1.15rem, 1.55vw, 1.45rem);
+    line-height: 1.4;
+    color: var(--ink);
+    padding-left: 1.5rem;
+    border-left: 1px solid var(--rust);
+  }
+
+  /* Chapter marker */
+  .chapter-slide {
+    justify-content: center; align-items: flex-start;
+  }
+  .chapter-roman {
+    font-family: 'Fraunces', serif; font-weight: 300; font-style: italic;
+    font-size: clamp(1rem, 1.3vw, 1.25rem);
+    letter-spacing: 0.4em; text-transform: uppercase;
+    color: var(--rust-deep); margin-bottom: 4vh;
+  }
+  .chapter-title {
+    font-family: 'Fraunces', serif; font-weight: 300;
+    font-size: clamp(3.2rem, 8.5vw, 8rem);
+    line-height: 0.96; letter-spacing: -0.03em; color: var(--ink);
+    max-width: 22ch;
+  }
+  .chapter-title em { font-style: italic; color: var(--rust-deep); font-weight: 400; }
+  .chapter-body {
+    font-family: 'Fraunces', serif; font-style: italic; font-weight: 300;
+    font-size: clamp(1.2rem, 1.75vw, 1.6rem);
+    line-height: 1.45; color: var(--ink-soft);
+    max-width: 54ch; margin-top: 5vh;
+  }
+
+  /* Reflection slides */
+  .reflect {
+    max-width: 60vw;
+    width: 100%;
+    text-align: left;
+  }
+  .reflect-big {
+    font-family: 'Fraunces', serif; font-weight: 300;
+    font-size: clamp(2.6rem, 5.2vw, 4.8rem);
+    line-height: 1.05; letter-spacing: -0.02em; color: var(--ink);
+  }
+  .reflect-big em { font-style: italic; color: var(--rust-deep); font-weight: 400; }
+
+  /* Timer */
+  .timer-wrap {
+    position: absolute; bottom: 9vh; right: 8vw;
+    display: flex; align-items: center; gap: 1rem; z-index: 5;
+  }
+  .timer-display {
+    font-family: 'Fraunces', serif; font-weight: 300;
+    font-variant-numeric: tabular-nums;
+    font-size: clamp(3rem, 5vw, 4.6rem);
+    line-height: 1; color: var(--rust-deep); letter-spacing: -0.02em;
+  }
+  .timer-display.running { color: var(--ink); }
+  .timer-display.done { color: #c94a3b; }
+  .timer-controls { display: flex; flex-direction: column; gap: 0.4rem; }
+  .timer-btn {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase;
+    background: transparent; border: 1px solid var(--rule); color: var(--ink);
+    padding: 0.55rem 1rem; cursor: pointer;
+    transition: all 0.25s ease; font-weight: 500; min-width: 100px;
+  }
+  .timer-btn:hover { border-color: var(--rust); color: var(--rust-deep); }
+  .timer-btn.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .timer-btn.primary:hover { background: var(--rust-deep); border-color: var(--rust-deep); }
+
+  /* Capture fields */
+  .capture {
+    width: 100%;
+    background: transparent; border: none;
+    border-bottom: 1px solid var(--rule);
+    font-family: 'Fraunces', serif;
+    font-size: clamp(1.05rem, 1.4vw, 1.35rem);
+    font-style: italic; color: var(--ink);
+    padding: 0.6rem 0; outline: none; font-weight: 300;
+    transition: border-color 0.2s ease;
+  }
+  .capture:focus { border-bottom-color: var(--rust); }
+  .capture::placeholder { color: var(--ink-mute); font-weight: 300; }
+
+  textarea.capture {
+    resize: none;
+    border: 1px solid var(--rule-soft); border-radius: 2px;
+    padding: 1rem 1.2rem; background: var(--paper-card);
+    line-height: 1.5; min-height: 8rem;
+  }
+  textarea.capture:focus { border-color: var(--rust); }
+
+  /* Alliance */
+  .alliance-grid {
+    display: grid; grid-template-columns: 1fr; gap: 5vh;
+    margin-top: 5vh; max-width: 78ch;
+  }
+  .alliance-prompt {
+    font-family: 'Fraunces', serif; font-weight: 300; font-style: italic;
+    font-size: clamp(1.3rem, 2vw, 1.85rem);
+    line-height: 1.35; color: var(--rust-deep);
+    margin-bottom: 1.2vh;
+  }
+
+  /* Actions grid */
+  .actions-grid {
+    display: grid; grid-template-columns: 1fr;
+    gap: 2.6vh; margin-top: 4vh; max-width: 90ch;
+  }
+  .action-row {
+    display: grid;
+    grid-template-columns: 60px 1.6fr 1fr 1fr;
+    gap: 1.2rem; align-items: center;
+  }
+  .action-row .lbl {
+    font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 1rem; color: var(--rust-deep); font-weight: 400;
+  }
+  .action-row .small-cap {
+    font-size: 0.62rem; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--ink-mute); font-weight: 500; display: block; margin-bottom: 0.3rem;
+  }
+  .action-row .field-wrap { display: flex; flex-direction: column; }
+  .action-row input {
+    font-size: clamp(0.95rem, 1.2vw, 1.15rem);
+  }
+
+  .charter-grid { display: grid; grid-template-columns: 1fr; gap: 1.8vh; margin-top: 4vh; max-width: 82ch; }
+  .charter-row { display: grid; grid-template-columns: auto 1fr; gap: 1rem; align-items: center; }
+  .charter-row .label {
+    font-family: 'Fraunces', serif; font-style: italic;
+    font-size: clamp(0.98rem, 1.2vw, 1.1rem);
+    color: var(--rust-deep); white-space: nowrap; font-weight: 400;
+  }
+
+  .covenant-box {
+    background: var(--paper-card); border: 1px solid var(--rule);
+    padding: 4vh 4vw; margin: 3vh auto 0; max-width: 72ch; position: relative;
+  }
+  .covenant-prompt {
+    font-family: 'Fraunces', serif; font-weight: 300;
+    font-size: clamp(1.4rem, 2.2vw, 2rem);
+    line-height: 1.3; color: var(--ink);
+    text-align: center; margin-bottom: 3vh;
+  }
+  .covenant-prompt em { font-style: italic; color: var(--rust-deep); font-weight: 400; }
+  .covenant-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 3vh; }
+  .covenant-meta label {
+    display: block; font-size: 0.7rem; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--rust-deep);
+    margin-bottom: 0.5rem; font-weight: 500;
+  }
+
+  .action-bar { display: flex; gap: 1rem; justify-content: center; margin-top: 3vh; }
+  .action-btn {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase;
+    background: var(--ink); color: var(--paper); border: 1px solid var(--ink);
+    padding: 0.8rem 1.6rem; cursor: pointer; font-weight: 500;
+    transition: all 0.25s ease;
+  }
+  .action-btn:hover { background: var(--rust-deep); border-color: var(--rust-deep); }
+  .action-btn.ghost { background: transparent; color: var(--ink); }
+  .action-btn.ghost:hover { background: var(--ink); color: var(--paper); }
+
+  /* Pulse */
+  .pulse {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem;
+    margin-top: 5vh; max-width: 72vw; margin-left: auto; margin-right: auto;
+  }
+  .pulse-cell {
+    border: 1px solid var(--rule); padding: 2.8vh 1vw;
+    text-align: center; cursor: pointer;
+    transition: all 0.25s ease; background: transparent;
+    font-family: 'Outfit', sans-serif;
+    display: flex; flex-direction: column; gap: 1.2vh; align-items: center;
+  }
+  .pulse-cell:hover { border-color: var(--rust); }
+  .pulse-cell.selected { background: var(--rust-deep); color: var(--paper); border-color: var(--rust-deep); }
+  .pulse-cell.selected .p-label, .pulse-cell.selected .p-num { color: var(--paper); }
+  .pulse-cell .p-num {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2rem, 3.5vw, 3.2rem);
+    font-weight: 300; color: var(--rust-deep); line-height: 1;
+  }
+  .pulse-cell .p-label {
+    font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--ink-soft); font-weight: 500;
+  }
+  .pulse-shift {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;
+    max-width: 44vw; margin: 5vh auto 0; text-align: center;
+  }
+  .pulse-shift > div { padding: 3vh; border-top: 1px solid var(--rust); }
+  .pulse-shift .tag {
+    font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--rust-deep); font-weight: 500; margin-bottom: 1rem;
+  }
+  .pulse-shift .val {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(3rem, 5vw, 4rem);
+    color: var(--ink); font-weight: 300; line-height: 1;
+  }
+
+  /* Lands diagram slide */
+  .lands-diagram {
+    margin-top: 4vh;
+    width: 100%;
+    max-width: 90vw;
+    display: flex;
+    justify-content: center;
+  }
+  .lands-diagram svg {
+    width: 100%;
+    max-width: 1100px;
+    height: auto;
+  }
+
+  /* Navigation */
+  .nav {
+    position: fixed; bottom: 2vh; right: 2vw; z-index: 50;
+    display: flex; gap: 0.5rem; align-items: center;
+  }
+  .nav button {
+    width: 36px; height: 36px; border: 1px solid var(--rule);
+    background: var(--paper); color: var(--ink);
+    font-family: 'Fraunces', serif; font-size: 1rem;
+    cursor: pointer; border-radius: 50%;
+    transition: all 0.25s ease;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .nav button:hover { border-color: var(--rust); color: var(--rust-deep); }
+  .progress {
+    font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 0.8rem; color: var(--ink-soft);
+    padding: 0 0.8rem; font-variant-numeric: tabular-nums; font-weight: 400;
+  }
+
+  .hint {
+    position: fixed; bottom: 2.4vh; left: 2vw;
+    font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--ink-mute); z-index: 50; font-weight: 500;
+  }
+  .hint kbd {
+    font-family: 'Outfit', sans-serif;
+    border: 1px solid var(--rule); border-radius: 2px;
+    padding: 0.15rem 0.45rem; margin: 0 0.2rem;
+    font-size: 0.7rem; color: var(--ink); font-weight: 500;
+  }
+
+  /* Lands walk steps */
+  .steps-row {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 2rem; margin-top: 6vh;
+  }
+  .step {
+    padding-top: 3vh; border-top: 1px solid var(--rust);
+    display: flex; flex-direction: column; gap: 1.4vh;
+  }
+  .step .n {
+    font-family: 'Fraunces', serif; font-style: italic;
+    color: var(--rust-deep); font-size: 1rem; font-weight: 400;
+  }
+  .step .h {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(1.4rem, 2vw, 1.9rem);
+    line-height: 1.15; color: var(--ink); font-weight: 400;
+  }
+  .step .h em { font-style: italic; color: var(--rust-deep); font-weight: 400; }
+  .step .d {
+    font-size: 0.9rem; line-height: 1.55;
+    color: var(--ink-soft); font-weight: 300;
+  }
+
+  @media print {
+    .nav, .hint, .run-header, .timer-wrap { display: none !important; }
+    .slide { position: relative !important; page-break-after: always; opacity: 1 !important; visibility: visible !important; height: auto; min-height: 100vh; }
+  }
+  @media print {
+    body.print-card * { visibility: hidden; }
+    body.print-card .covenant-box, body.print-card .covenant-box * { visibility: visible; }
+    body.print-card .covenant-box { position: absolute; top: 8vh; left: 10vw; right: 10vw; }
+  }
+</style>
+</head>
+<body>
+
+<div class="run-header">
+  <div class="brand">ONE VOICE · ONE TEAM</div>
+  <div class="phase">
+    <span class="clock" id="clock">00:00</span>
+    <span id="phase-label">Welcome</span>
+  </div>
+</div>
+
+<div class="deck" id="deck">
+
+  <!-- 01 · COVER -->
+  <section class="slide active center-all" data-slide="1" data-phase="Welcome">
+    <div class="hero-caption">Greece HR Team · A Continuation</div>
+    <div class="rule-mark"></div>
+    <div class="display" style="font-size: clamp(3.4rem, 9vw, 9rem); line-height: 0.95; letter-spacing: -0.03em;">ONE VOICE<em>,</em><br>ONE TEAM<em>.</em></div>
+    <div class="lede" style="margin-top: 3vh; font-size: clamp(1.3rem, 2.2vw, 2rem); max-width: 28ch;">The team we are <em style="font-style: italic; color: var(--rust-deep);">becoming.</em></div>
+    <div class="rule-mark"></div>
+    <div style="font-family: 'Outfit', sans-serif; font-size: clamp(0.88rem, 1.1vw, 1.02rem); letter-spacing: 0.25em; text-transform: uppercase; color: var(--ink-soft); font-weight: 500;">Hosted by Laura · Facilitated by Sezen</div>
+  </section>
+
+  <!-- 02 · CONTINUATION -->
+  <section class="slide center-all" data-slide="2" data-phase="Opening">
+    <div class="hero-caption">Today</div>
+    <div class="hero-word">Is a <em>continuation.</em></div>
+    <div class="lede" style="margin-top: 4vh;">Of a conversation we already began.<br>Of a team we are already becoming.</div>
+  </section>
+
+  <!-- 03 · LAURA OPENS -->
+  <section class="slide center-all" data-slide="3" data-phase="Opening · Laura">
+    <div class="hero-caption">09:00 → 09:15</div>
+    <div class="display d-xl">A word<br>from <em>Laura.</em></div>
+    <div class="lede" style="margin-top: 4vh;">Why we are here.<br>What she is asking of us today.</div>
+  </section>
+
+  <!-- 04 · WHY WE ARE HERE -->
+  <section class="slide" data-slide="4" data-phase="Intention">
+    <div class="eyebrow">Our day has a purpose</div>
+    <div class="display d-l">What we are here <em>for.</em></div>
+    <div class="cards c-5" style="margin-top: 6vh;">
+      <div class="card"><div class="num">01</div><div class="title">Strengthen how we <em>connect</em></div></div>
+      <div class="card"><div class="num">02</div><div class="title">Reset our <em>ways of working</em></div></div>
+      <div class="card"><div class="num">03</div><div class="title">Build <em>one</em> shared identity</div></div>
+      <div class="card"><div class="num">04</div><div class="title">Leave with <em>concrete</em> next steps</div></div>
+      <div class="card"><div class="num">05</div><div class="title">Sign the <em>protocol</em> we live by</div></div>
+    </div>
+  </section>
+
+  <!-- 05 · AGENDA -->
+  <section class="slide" data-slide="5" data-phase="Our day">
+    <div class="eyebrow">Six and a half hours · Five movements</div>
+    <div class="display d-l">The shape of our <em>day.</em></div>
+    <div class="agenda">
+      <div class="a-phase">
+        <div class="no">01</div>
+        <div class="name"><em>Open</em> & alliance</div>
+        <div class="cap">09:00 → 09:45</div>
+      </div>
+      <div class="a-phase">
+        <div class="no">02</div>
+        <div class="name"><em>Exploring</em> the lands</div>
+        <div class="cap">09:45 → 12:00</div>
+      </div>
+      <div class="a-phase">
+        <div class="no">03</div>
+        <div class="name"><em>Lunch</em> · connection</div>
+        <div class="cap">12:00 → 13:00</div>
+      </div>
+      <div class="a-phase">
+        <div class="no">04</div>
+        <div class="name">The team we are <em>becoming</em></div>
+        <div class="cap">13:00 → 14:30</div>
+      </div>
+      <div class="a-phase">
+        <div class="no">05</div>
+        <div class="name">What we <em>sign</em></div>
+        <div class="cap">14:45 → 15:30</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 · THREE PRINCIPLES (reframed) -->
+  <section class="slide" data-slide="6" data-phase="How we work">
+    <div class="eyebrow">How we will hold this day</div>
+    <div class="display d-l">Three <em>principles.</em></div>
+    <div class="cards c-3" style="margin-top: 6vh;">
+      <div class="card">
+        <div class="num">01</div>
+        <div class="title">We hold the <em>system</em> at the centre</div>
+        <div class="body">Our attention is on the team as a whole, not on any one of us alone. If something matters to you, it matters to us.</div>
+      </div>
+      <div class="card">
+        <div class="num">02</div>
+        <div class="title">What is <em>alive</em>, we follow</div>
+        <div class="body">What surfaces — the words, the silences, the small shifts in energy — is our team speaking to itself. We do not walk around it. We walk with it.</div>
+      </div>
+      <div class="card">
+        <div class="num">03</div>
+        <div class="title">Every <em>voice</em> belongs</div>
+        <div class="body">Legacy. New. Loud. Quiet. All of it has a place here.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 07 · TEMPERATURE OF THE SYSTEM -->
+  <section class="slide" data-slide="7" data-phase="Temperature · Check-in">
+    <div class="eyebrow">10 min · 09:15 → 09:25 · Before we go further</div>
+    <div class="display d-l">The <em>temperature</em> of the system.</div>
+    <div class="lede">Before we move into content, we land in the room.<br>One word. One sentence. From each of us.</div>
+    <div class="questions">
+      <div class="q">What one word names the state I am bringing into this room today?</div>
+      <div class="q">What one sentence do I want this team to hear from me before we begin?</div>
+    </div>
+  </section>
+
+  <!-- 08 · DESIGNED TEAM ALLIANCE -->
+  <section class="slide" data-slide="8" data-phase="Our alliance">
+    <div class="eyebrow">20 min · 09:25 → 09:45 · We design this ourselves</div>
+    <div class="display d-l">Our alliance for <em>today.</em></div>
+    <div class="alliance-grid">
+      <div>
+        <div class="alliance-prompt">The atmosphere we want to create today is…</div>
+        <input type="text" class="capture" data-key="a1" placeholder="one or two words the whole team agrees on">
+      </div>
+      <div>
+        <div class="alliance-prompt">When that is challenged, we will…</div>
+        <input type="text" class="capture" data-key="a2" placeholder="the act we commit to, together">
+      </div>
+    </div>
+  </section>
+
+  <!-- 08 · CHAPTER II HEADER (NEW) -->
+  <section class="slide chapter-slide" data-slide="8" data-phase="Chapter II">
+    <div class="chapter-roman">Chapter II</div>
+    <div class="chapter-title">What we <em>carry.</em></div>
+    <div class="chapter-body">Before we imagine where we are going, we look at what we are already holding. What we named in Session One. What we have lived since. What is still alive in the room, today.</div>
+  </section>
+
+  <!-- 09 · OPENING PULSE -->
+  <section class="slide center-all" data-slide="9" data-phase="Pulse · Before">
+    <div class="eyebrow">09:45 · Show me</div>
+    <div class="display d-m" style="max-width: 22ch;">Right now, how much do I feel this team is already <em>one?</em></div>
+    <div class="pulse" id="pulse-before">
+      <div class="pulse-cell" data-val="1"><div class="p-num">01</div><div class="p-label">Not yet</div></div>
+      <div class="pulse-cell" data-val="2"><div class="p-num">02</div><div class="p-label">Barely</div></div>
+      <div class="pulse-cell" data-val="3"><div class="p-num">03</div><div class="p-label">Halfway</div></div>
+      <div class="pulse-cell" data-val="4"><div class="p-num">04</div><div class="p-label">Mostly</div></div>
+      <div class="pulse-cell" data-val="5"><div class="p-num">05</div><div class="p-label">Fully</div></div>
+    </div>
+    <div class="lede" style="margin-top: 4vh; font-size: 1rem;">Tap your number — or show it with a hand.<br>We return to this at the end.</div>
+  </section>
+
+  <!-- 10 · SESSION ONE NAMED -->
+  <section class="slide" data-slide="10" data-phase="Session One">
+    <div class="eyebrow">What we named, weeks ago</div>
+    <div class="display d-l">From Session <em>One.</em></div>
+    <div class="cards c-4" style="margin-top: 6vh;">
+      <div class="card"><div class="num">01</div><div class="title">Ways of <em>working</em></div></div>
+      <div class="card"><div class="num">02</div><div class="title"><em>Communication</em></div></div>
+      <div class="card"><div class="num">03</div><div class="title">Project <em>management</em></div></div>
+      <div class="card"><div class="num">04</div><div class="title">One HR <em>voice</em></div></div>
+    </div>
+  </section>
+
+  <!-- 11 · STILL ALIVE? -->
+  <section class="slide" data-slide="11" data-phase="Reflect · Alive">
+    <div class="eyebrow">Weeks later · In this room</div>
+    <div class="reflect" style="margin-top: 6vh;">
+      <div class="reflect-big">Of what we named, what is still <em>alive?</em></div>
+    </div>
+    <div class="lede" style="margin-top: 5vh; max-width: 52ch;">We ask this not to repeat the past — but to know what we are still carrying, so the lands work can meet us honestly.</div>
+  </section>
+
+  <!-- 12 · WHAT DO WE KEEP? -->
+  <section class="slide" data-slide="12" data-phase="Reflect · Keep">
+    <div class="eyebrow">Our choice, not our fate</div>
+    <div class="reflect" style="margin-top: 6vh;">
+      <div class="reflect-big">Of what is alive, what do we choose to <em>keep?</em></div>
+    </div>
+    <div class="lede" style="margin-top: 5vh; max-width: 58ch;">The old is not wrong. The new is not a threat.<br>Naming what we keep frees the rest to be released — so we enter the lands lighter.</div>
+  </section>
+
+  <!-- 13 · LANDS INVITATION -->
+  <section class="slide" data-slide="13" data-phase="Lands Work · Invitation">
+    <div class="eyebrow">Organizational Lands Work · Where reflection meets the body</div>
+    <div class="display d-l">The <em>lands</em> we live in.</div>
+    <div class="lede" style="max-width: 64ch; font-size: clamp(1.2rem, 1.75vw, 1.6rem);">
+      We have named what is alive.<br>
+      We have chosen what to keep.<br>
+      Now we walk into the room with it — and meet each other where we actually stand.
+    </div>
+  </section>
+
+  <!-- 14 · LANDS DIAGRAM (NEW) -->
+  <section class="slide center-all" data-slide="14" data-phase="Lands Work · The map">
+    <div class="eyebrow">The three lands</div>
+    <div class="display d-m">We stand where we are.<br>We visit where we are <em>not.</em></div>
+
+    <div class="lands-diagram">
+      <svg viewBox="0 0 1200 640" xmlns="http://www.w3.org/2000/svg">
+        <!-- Top label -->
+        <text x="600" y="60" text-anchor="middle" font-family="Outfit, sans-serif" font-size="11" letter-spacing="6" fill="#8F5328" font-weight="600">AS A TOURIST</text>
+        <text x="600" y="95" text-anchor="middle" font-family="Fraunces, serif" font-size="20" font-style="italic" fill="#4A443C">we visit each land in turn — curious, open, without judgement</text>
+
+        <!-- Movement arcs -->
+        <path d="M 250,260 Q 425,160 600,260" fill="none" stroke="#8F5328" stroke-width="1.5" stroke-dasharray="6,5" opacity="0.7"/>
+        <path d="M 600,260 Q 775,160 950,260" fill="none" stroke="#8F5328" stroke-width="1.5" stroke-dasharray="6,5" opacity="0.7"/>
+        <!-- Arrowheads -->
+        <path d="M 593,250 L 600,262 L 608,252" fill="none" stroke="#8F5328" stroke-width="1.5"/>
+        <path d="M 943,250 L 950,262 L 958,252" fill="none" stroke="#8F5328" stroke-width="1.5"/>
+
+        <!-- Legacy land -->
+        <g>
+          <path d="M 50,380 Q 100,365 150,378 Q 200,392 250,372 Q 300,355 350,380 L 350,520 L 50,520 Z"
+                fill="#EAE2D2" stroke="#8F5328" stroke-width="1" opacity="0.85"/>
+          <!-- Hills -->
+          <path d="M 85,378 Q 120,345 155,378" fill="none" stroke="#8F5328" stroke-width="1.2" opacity="0.55"/>
+          <path d="M 175,374 Q 215,340 255,374" fill="none" stroke="#8F5328" stroke-width="1.2" opacity="0.55"/>
+          <path d="M 270,378 Q 300,355 330,378" fill="none" stroke="#8F5328" stroke-width="1.2" opacity="0.4"/>
+          <!-- Label -->
+          <text x="200" y="570" text-anchor="middle" font-family="Fraunces, serif" font-size="32" fill="#1F1C18">Legacy</text>
+          <text x="200" y="600" text-anchor="middle" font-family="Outfit, sans-serif" font-size="10" letter-spacing="4" fill="#8F5328" font-weight="500">WHAT WE HAVE BUILT</text>
+        </g>
+
+        <!-- River (center) -->
+        <g>
+          <rect x="400" y="380" width="400" height="140" fill="#F4EFE6"/>
+          <path d="M 400,405 Q 450,400 500,410 Q 550,418 600,405 Q 650,395 700,410 Q 750,418 800,410"
+                fill="none" stroke="#8F5328" stroke-width="1.5" opacity="0.55"/>
+          <path d="M 400,445 Q 450,440 500,450 Q 550,458 600,445 Q 650,435 700,450 Q 750,458 800,450"
+                fill="none" stroke="#8F5328" stroke-width="1.5" opacity="0.45"/>
+          <path d="M 400,485 Q 450,480 500,490 Q 550,498 600,485 Q 650,475 700,490 Q 750,498 800,490"
+                fill="none" stroke="#8F5328" stroke-width="1.5" opacity="0.35"/>
+          <text x="600" y="570" text-anchor="middle" font-family="Fraunces, serif" font-size="32" font-style="italic" fill="#8F5328">the river</text>
+          <text x="600" y="600" text-anchor="middle" font-family="Outfit, sans-serif" font-size="10" letter-spacing="4" fill="#8F5328" font-weight="500">WHAT FLOWS BETWEEN</text>
+        </g>
+
+        <!-- New land -->
+        <g>
+          <path d="M 850,380 Q 900,362 950,380 Q 1000,398 1050,370 Q 1100,348 1150,380 L 1150,520 L 850,520 Z"
+                fill="#EAE2D2" stroke="#8F5328" stroke-width="1" opacity="0.85"/>
+          <!-- Budding forms -->
+          <circle cx="895" cy="372" r="5" fill="none" stroke="#8F5328" stroke-width="1.2" opacity="0.6"/>
+          <circle cx="975" cy="368" r="4" fill="none" stroke="#8F5328" stroke-width="1.2" opacity="0.6"/>
+          <circle cx="1055" cy="376" r="6" fill="none" stroke="#8F5328" stroke-width="1.2" opacity="0.6"/>
+          <line x1="895" y1="372" x2="895" y2="385" stroke="#8F5328" stroke-width="1" opacity="0.4"/>
+          <line x1="975" y1="368" x2="975" y2="385" stroke="#8F5328" stroke-width="1" opacity="0.4"/>
+          <line x1="1055" y1="376" x2="1055" y2="385" stroke="#8F5328" stroke-width="1" opacity="0.4"/>
+          <!-- Label -->
+          <text x="1000" y="570" text-anchor="middle" font-family="Fraunces, serif" font-size="32" fill="#1F1C18">New</text>
+          <text x="1000" y="600" text-anchor="middle" font-family="Outfit, sans-serif" font-size="10" letter-spacing="4" fill="#8F5328" font-weight="500">WHAT HAS ARRIVED</text>
+        </g>
+
+        <!-- Tourist dot -->
+        <circle cx="600" cy="175" r="5" fill="#8F5328"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- 15 · LANDS WALK + TIMER -->
+  <section class="slide" data-slide="15" data-phase="Lands Work · Walk" data-timer="5400">
+    <div class="eyebrow">The walk · 90 minutes together</div>
+    <div class="display d-m">One shore at a <em>time.</em></div>
+    <div class="steps-row">
+      <div class="step">
+        <div class="n">01</div>
+        <div class="h">Find your <em>land</em></div>
+        <div class="d">Place yourself where you honestly stand. Legacy, new, or the river between. No right answer.</div>
+      </div>
+      <div class="step">
+        <div class="n">02</div>
+        <div class="h">Speak from <em>it</em></div>
+        <div class="d">"From this land, what is true for me is…" One line. First person.</div>
+      </div>
+      <div class="step">
+        <div class="n">03</div>
+        <div class="h">Visit <em>another</em></div>
+        <div class="d">Step into a land that is not yours. Stand there. Listen. Ask questions as a tourist would.</div>
+      </div>
+      <div class="step">
+        <div class="n">04</div>
+        <div class="h">What did you <em>see?</em></div>
+        <div class="d">"Standing here, what I now see is…" What did the visit show you that the shore did not?</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 16 · TEAM'S WISH -->
+  <section class="slide" data-slide="16" data-phase="Lands Work · Together">
+    <div class="eyebrow">From the lands · Together now</div>
+    <div class="reflect" style="margin-top: 6vh;">
+      <div class="reflect-big">What does <em>this team</em> ask of us now?</div>
+    </div>
+    <div class="lede" style="margin-top: 5vh; max-width: 56ch;">One phrase. Spoken aloud. One person at a time.<br>We listen for the thread that runs through all of them.</div>
+  </section>
+
+  <!-- 17 · LUNCH -->
+  <section class="slide center-all" data-slide="17" data-phase="Lunch · Connection">
+    <div class="hero-caption">12:00 → 13:00 · Sixty minutes</div>
+    <div class="display d-xl">A long <em>lunch.</em></div>
+    <div class="lede" style="margin-top: 5vh;">No agenda.<br>Just each other.</div>
+  </section>
+
+  <!-- 18 · RETURN -->
+  <section class="slide center-all" data-slide="18" data-phase="Return">
+    <div class="eyebrow">We come back · 13:00</div>
+    <div class="display d-l" style="max-width: 22ch;">Where are you, <em>now?</em></div>
+    <div class="lede" style="margin-top: 5vh;">One word each.<br>We land in the room again.</div>
+  </section>
+
+  <!-- 19 · FUTURE PULL OPENER -->
+  <section class="slide center-all" data-slide="19" data-phase="The team we are becoming">
+    <div class="hero-caption">13:00 → 14:30</div>
+    <div class="display d-xl">The team we are <em>becoming.</em></div>
+    <div class="lede" style="margin-top: 5vh; max-width: 52ch;">We have looked back.<br>We have looked sideways.<br>Now we look forward.</div>
+  </section>
+
+  <!-- 20 · CONCRETE ACTIONS (interactive + timer) -->
+  <section class="slide" data-slide="21" data-phase="Concrete actions" data-timer="3600">
+    <div class="eyebrow">From named to done · We write this together</div>
+    <div class="display d-m">What we <em>do</em>, starting Monday.</div>
+    <div class="lede">Three actions. One owner each. One date each.<br>Fewer, real, ours.</div>
+    <div class="actions-grid">
+      <div class="action-row">
+        <div class="lbl">01</div>
+        <div class="field-wrap"><span class="small-cap">Action</span><input type="text" class="capture action-input" data-key="act1" placeholder="the specific act, one sentence"></div>
+        <div class="field-wrap"><span class="small-cap">Owner</span><input type="text" class="capture action-input" data-key="own1" placeholder="one name"></div>
+        <div class="field-wrap"><span class="small-cap">By when</span><input type="text" class="capture action-input" data-key="by1" placeholder="a real date"></div>
+      </div>
+      <div class="action-row">
+        <div class="lbl">02</div>
+        <div class="field-wrap"><span class="small-cap">Action</span><input type="text" class="capture action-input" data-key="act2" placeholder="the specific act, one sentence"></div>
+        <div class="field-wrap"><span class="small-cap">Owner</span><input type="text" class="capture action-input" data-key="own2" placeholder="one name"></div>
+        <div class="field-wrap"><span class="small-cap">By when</span><input type="text" class="capture action-input" data-key="by2" placeholder="a real date"></div>
+      </div>
+      <div class="action-row">
+        <div class="lbl">03</div>
+        <div class="field-wrap"><span class="small-cap">Action</span><input type="text" class="capture action-input" data-key="act3" placeholder="the specific act, one sentence"></div>
+        <div class="field-wrap"><span class="small-cap">Owner</span><input type="text" class="capture action-input" data-key="own3" placeholder="one name"></div>
+        <div class="field-wrap"><span class="small-cap">By when</span><input type="text" class="capture action-input" data-key="by3" placeholder="a real date"></div>
+      </div>
+    </div>
+    <div class="action-bar">
+      <button class="action-btn ghost" onclick="copyActions()">Copy actions</button>
+    </div>
+  </section>
+
+  <!-- 22 · BREAK + TIMER -->
+  <section class="slide center-all" data-slide="22" data-phase="Break" data-timer="900">
+    <div class="hero-caption">14:30 → 14:45</div>
+    <div class="display d-xl">A <em>fifteen</em> minute pause.</div>
+    <div class="lede" style="margin-top: 5vh;">Breath. Water. Silence.</div>
+  </section>
+
+  <!-- 23 · TEAM PROTOCOL -->
+  <section class="slide" data-slide="23" data-phase="Team Protocol">
+    <div class="eyebrow">30 min · 14:45 → 15:15 · What we sign and live by</div>
+    <div class="display d-l">Our team <em>protocol.</em></div>
+    <div class="charter-grid">
+      <div class="charter-row">
+        <span class="label">We are one team because…</span>
+        <input type="text" class="capture charter-input" data-key="c1" placeholder="complete this line together">
+      </div>
+      <div class="charter-row">
+        <span class="label">We speak to each other by…</span>
+        <input type="text" class="capture charter-input" data-key="c2" placeholder="name the ritual">
+      </div>
+      <div class="charter-row">
+        <span class="label">We make decisions through…</span>
+        <input type="text" class="capture charter-input" data-key="c3" placeholder="be specific">
+      </div>
+      <div class="charter-row">
+        <span class="label">When we disagree, we…</span>
+        <input type="text" class="capture charter-input" data-key="c4" placeholder="agree the move">
+      </div>
+      <div class="charter-row">
+        <span class="label">We show up for the business by…</span>
+        <input type="text" class="capture charter-input" data-key="c5" placeholder="our promise">
+      </div>
+      <div class="charter-row">
+        <span class="label">We hold each other accountable by…</span>
+        <input type="text" class="capture charter-input" data-key="c6" placeholder="the act">
+      </div>
+      <div class="charter-row">
+        <span class="label">Our signature line — never compromised:</span>
+        <input type="text" class="capture charter-input" data-key="c7" placeholder="one non-negotiable">
+      </div>
+    </div>
+    <div class="action-bar">
+      <button class="action-btn ghost" onclick="copyProtocol()">Copy protocol</button>
+      <button class="action-btn" onclick="window.print()">Print</button>
+    </div>
+  </section>
+
+  <!-- 24 · PERSONAL COMMITMENT -->
+  <section class="slide" data-slide="24" data-phase="Personal Commitment">
+    <div class="eyebrow">15:15 · The most important minute of the day</div>
+    <div class="display d-l" style="text-align: center;">My <em>commitment.</em></div>
+    <div class="covenant-box">
+      <div class="covenant-prompt">From tomorrow, what I will <em>carry differently</em> for this team is…</div>
+      <textarea class="capture" id="covenant-text" rows="3" placeholder="One sentence. One act. One person."></textarea>
+      <div class="covenant-meta">
+        <div>
+          <label>Signed</label>
+          <input type="text" class="capture" id="covenant-name" placeholder="Your name">
+        </div>
+        <div>
+          <label>Date</label>
+          <input type="text" class="capture" id="covenant-date">
+        </div>
+      </div>
+    </div>
+    <div class="action-bar">
+      <button class="action-btn ghost" onclick="printCard()">Print my card</button>
+      <button class="action-btn" onclick="copyCovenant()">Copy my covenant</button>
+    </div>
+  </section>
+
+  <!-- 25 · CLOSING PULSE -->
+  <section class="slide center-all" data-slide="25" data-phase="Pulse · After">
+    <div class="eyebrow">Same question · Show me again</div>
+    <div class="display d-m" style="max-width: 22ch;">Right now, how much do I feel this team is <em>one?</em></div>
+    <div class="pulse" id="pulse-after">
+      <div class="pulse-cell" data-val="1"><div class="p-num">01</div><div class="p-label">Not yet</div></div>
+      <div class="pulse-cell" data-val="2"><div class="p-num">02</div><div class="p-label">Barely</div></div>
+      <div class="pulse-cell" data-val="3"><div class="p-num">03</div><div class="p-label">Halfway</div></div>
+      <div class="pulse-cell" data-val="4"><div class="p-num">04</div><div class="p-label">Mostly</div></div>
+      <div class="pulse-cell" data-val="5"><div class="p-num">05</div><div class="p-label">Fully</div></div>
+    </div>
+    <div class="pulse-shift">
+      <div><div class="tag">Where we started</div><div class="val" id="before-val">—</div></div>
+      <div><div class="tag">Where we are now</div><div class="val" id="after-val">—</div></div>
+    </div>
+  </section>
+
+  <!-- 26 · CLOSING RITUAL (simplified — facilitator lines removed) -->
+  <section class="slide center-all" data-slide="26" data-phase="Closing circle">
+    <div class="hero-caption">The circle</div>
+    <div class="display d-xl">From where I stand <em>now.</em></div>
+  </section>
+
+  <!-- 27 · THANK YOU -->
+  <section class="slide center-all" data-slide="27" data-phase="Done">
+    <div class="hero-caption">We were not one team by accident</div>
+    <div class="rule-mark"></div>
+    <div class="hero-word">Thank <em>you.</em></div>
+    <div class="rule-mark"></div>
+    <div class="lede" style="margin-top: 1vh;">We became one on purpose.</div>
+  </section>
+
+</div>
+
+<div class="nav">
+  <button id="prev" aria-label="Previous">‹</button>
+  <span class="progress" id="progress">01 / 27</span>
+  <button id="next" aria-label="Next">›</button>
+  <button id="fs" aria-label="Fullscreen" title="Fullscreen (F)">⛶</button>
+</div>
+
+<div class="hint"><kbd>←</kbd><kbd>→</kbd> navigate · <kbd>F</kbd> fullscreen · <kbd>Esc</kbd> exit</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  let current = 0;
+  const total = slides.length;
+  const progress = document.getElementById('progress');
+  const clock = document.getElementById('clock');
+  const phaseLabel = document.getElementById('phase-label');
+
+  let sessionStart = null;
+  const pulse = { before: null, after: null };
+  const captures = {};
+
+  function show(i) {
+    slides.forEach((s, idx) => s.classList.toggle('active', idx === i));
+    current = i;
+    progress.textContent = String(i+1).padStart(2,'0') + ' / ' + String(total).padStart(2,'0');
+    const active = slides[i];
+    phaseLabel.textContent = active.getAttribute('data-phase') || '—';
+    if (i > 0 && !sessionStart) sessionStart = Date.now();
+    if (i === 24) renderPulseResult();
+    mountTimer(active);
+  }
+
+  document.getElementById('next').addEventListener('click', () => { if (current < total - 1) show(current + 1); });
+  document.getElementById('prev').addEventListener('click', () => { if (current > 0) show(current - 1); });
+  document.addEventListener('keydown', (e) => {
+    const tag = (e.target && e.target.tagName) || '';
+    if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
+      e.preventDefault();
+      if (current < total - 1) show(current + 1);
+    } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+      e.preventDefault();
+      if (current > 0) show(current - 1);
+    } else if (e.key === 'Home') { show(0); }
+    else if (e.key === 'End') { show(total - 1); }
+    else if (e.key.toLowerCase() === 'f') { toggleFullscreen(); }
+  });
+
+  function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(()=>{});
+    } else {
+      document.exitFullscreen();
+    }
+  }
+  document.getElementById('fs').addEventListener('click', toggleFullscreen);
+
+  setInterval(() => {
+    if (!sessionStart) { clock.textContent = '00:00'; return; }
+    const s = Math.floor((Date.now() - sessionStart) / 1000);
+    const h = Math.floor(s / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    const ss = s % 60;
+    clock.textContent = (h > 0 ? String(h) + ':' + String(m).padStart(2,'0') : String(m).padStart(2,'0') + ':' + String(ss).padStart(2,'0'));
+  }, 1000);
+
+  let timerState = null;
+  function mountTimer(slide) {
+    if (timerState) {
+      clearInterval(timerState.interval);
+      if (timerState.node) timerState.node.remove();
+      timerState = null;
+    }
+    const sec = parseInt(slide.getAttribute('data-timer'), 10);
+    if (!sec) return;
+
+    const wrap = document.createElement('div');
+    wrap.className = 'timer-wrap';
+    wrap.innerHTML = `
+      <div class="timer-display" data-timer-display>${fmt(sec)}</div>
+      <div class="timer-controls">
+        <button class="timer-btn primary" data-timer-start>Start</button>
+        <button class="timer-btn" data-timer-reset>Reset</button>
+      </div>`;
+    slide.appendChild(wrap);
+
+    const display = wrap.querySelector('[data-timer-display]');
+    const startBtn = wrap.querySelector('[data-timer-start]');
+    const resetBtn = wrap.querySelector('[data-timer-reset]');
+
+    timerState = { remaining: sec, original: sec, running: false, interval: null, node: wrap, display, startBtn };
+
+    startBtn.addEventListener('click', () => {
+      if (!timerState) return;
+      if (timerState.running) {
+        clearInterval(timerState.interval);
+        timerState.running = false;
+        timerState.startBtn.textContent = 'Resume';
+        timerState.display.classList.remove('running');
+      } else {
+        timerState.running = true;
+        timerState.startBtn.textContent = 'Pause';
+        timerState.display.classList.add('running');
+        timerState.interval = setInterval(() => {
+          timerState.remaining -= 1;
+          if (timerState.remaining <= 0) {
+            timerState.remaining = 0;
+            clearInterval(timerState.interval);
+            timerState.running = false;
+            timerState.display.classList.remove('running');
+            timerState.display.classList.add('done');
+            timerState.startBtn.textContent = 'Done';
+          }
+          timerState.display.textContent = fmt(timerState.remaining);
+        }, 1000);
+      }
+    });
+
+    resetBtn.addEventListener('click', () => {
+      if (!timerState) return;
+      clearInterval(timerState.interval);
+      timerState.remaining = timerState.original;
+      timerState.running = false;
+      timerState.display.textContent = fmt(timerState.original);
+      timerState.display.classList.remove('running','done');
+      timerState.startBtn.textContent = 'Start';
+    });
+  }
+
+  function fmt(totalSec) {
+    const m = Math.floor(totalSec / 60);
+    const s = totalSec % 60;
+    return String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+  }
+
+  function setupPulse(groupId, which) {
+    const group = document.getElementById(groupId);
+    if (!group) return;
+    const cells = group.querySelectorAll('.pulse-cell');
+    cells.forEach(cell => {
+      cell.addEventListener('click', () => {
+        cells.forEach(c => c.classList.remove('selected'));
+        cell.classList.add('selected');
+        pulse[which] = parseInt(cell.getAttribute('data-val'), 10);
+      });
+    });
+  }
+  setupPulse('pulse-before', 'before');
+  setupPulse('pulse-after', 'after');
+
+  function renderPulseResult() {
+    const b = document.getElementById('before-val');
+    const a = document.getElementById('after-val');
+    if (b) b.textContent = pulse.before != null ? pulse.before : '—';
+    if (a) a.textContent = pulse.after != null ? pulse.after : '—';
+  }
+
+  document.querySelectorAll('.capture').forEach(inp => {
+    inp.addEventListener('input', () => {
+      if (inp.dataset.key) captures[inp.dataset.key] = inp.value;
+    });
+  });
+
+  const dateField = document.getElementById('covenant-date');
+  if (dateField) {
+    const d = new Date();
+    dateField.value = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+  }
+
+  window.copyProtocol = function() {
+    const labels = [
+      'We are one team because…',
+      'We speak to each other by…',
+      'We make decisions through…',
+      'When we disagree, we…',
+      'We show up for the business by…',
+      'We hold each other accountable by…',
+      'Our signature line:'
+    ];
+    const keys = ['c1','c2','c3','c4','c5','c6','c7'];
+    let text = 'OUR TEAM PROTOCOL\n\n';
+    keys.forEach((k, i) => { text += labels[i] + ' ' + (captures[k] || '[to be written]') + '\n'; });
+    text += '\nSigned by the Greece HR team · ' + new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+    navigator.clipboard.writeText(text).then(() => flashMessage('Protocol copied.'))
+      .catch(() => flashMessage('Copy failed. Use Print instead.'));
+  };
+
+  window.copyActions = function() {
+    let text = 'OUR THREE ACTIONS\n\n';
+    for (let i = 1; i <= 3; i++) {
+      text += `${i}. ${captures['act'+i] || '[action]'} · Owned by ${captures['own'+i] || '[owner]'} · By ${captures['by'+i] || '[date]'}\n`;
+    }
+    text += '\nAgreed by the Greece HR team · ' + new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+    navigator.clipboard.writeText(text).then(() => flashMessage('Actions copied.'))
+      .catch(() => flashMessage('Copy failed.'));
+  };
+
+  window.copyCovenant = function() {
+    const t = document.getElementById('covenant-text').value;
+    const n = document.getElementById('covenant-name').value;
+    const d = document.getElementById('covenant-date').value;
+    const text = 'MY PERSONAL COMMITMENT\n\nFrom tomorrow, what I will carry differently for this team is…\n\n' + (t || '[your commitment]') + '\n\nSigned: ' + (n || '[name]') + '\nDate: ' + (d || '');
+    navigator.clipboard.writeText(text).then(() => flashMessage('Commitment copied.'))
+      .catch(() => flashMessage('Copy failed. Use Print instead.'));
+  };
+
+  window.printCard = function() {
+    document.body.classList.add('print-card');
+    setTimeout(() => {
+      window.print();
+      setTimeout(() => document.body.classList.remove('print-card'), 200);
+    }, 100);
+  };
+
+  function flashMessage(msg) {
+    const el = document.createElement('div');
+    el.textContent = msg;
+    el.style.cssText = 'position:fixed;bottom:8vh;left:50%;transform:translateX(-50%);background:#1F1C18;color:#F4EFE6;padding:1rem 1.6rem;font-family:Outfit;font-size:0.8rem;letter-spacing:0.2em;text-transform:uppercase;z-index:1000;opacity:0;transition:opacity 0.3s ease;';
+    document.body.appendChild(el);
+    requestAnimationFrame(() => { el.style.opacity = '1'; });
+    setTimeout(() => { el.style.opacity = '0'; setTimeout(() => el.remove(), 400); }, 2200);
+  }
+
+  show(0);
+</script>
+</body>
+</html>
